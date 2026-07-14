@@ -129,7 +129,7 @@ function renderOrder(order, paymentQRUrl) {
     `).join('');
     
     // 总价
-    document.getElementById('total-price').textContent = `¥${order.totalPrice}`;
+    document.getElementById('total-price').textContent = `¥${order.total_price || order.totalPrice || 0}`;
     
     // 收款码
     const qrContainer = document.getElementById('payment-qr');
@@ -138,7 +138,7 @@ function renderOrder(order, paymentQRUrl) {
     }
     
     // 提示文字
-    document.getElementById('qr-tip').innerHTML = '<strong>⚠️ 请支付 ¥' + order.totalPrice + '</strong><br><span style=\"color:#ef4444;font-size:0.95rem\">付款完成后务必点击下方按钮通知歌手，否则歌手无法收到您的点歌！</span>';
+    document.getElementById('qr-tip').innerHTML = '<strong>⚠️ 请支付 ¥' + order.total_price || order.totalPrice || 0 + '</strong><br><span style=\"color:#ef4444;font-size:0.95rem\">付款完成后务必点击下方按钮通知歌手，否则歌手无法收到您的点歌！</span>';
 }
 
 // ============================================

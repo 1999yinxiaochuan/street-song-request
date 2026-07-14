@@ -127,20 +127,20 @@ function updateCartSummary(data) {
 function renderCart() {
     var c = document.getElementById('cart-list');
     if (!cartSongs.length) { c.innerHTML = '<p class="empty-queue">还没有点歌，去点一首吧！</p>'; return; }
-    c.innerHTML = cartSongs.map(function(s, i) { return '<div class="queue-item cart-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="song-price">¥' + s.price.toFixed(2) + '</div></div><button class="btn-remove" onclick="removeFromCart(' + s.id + ')" title="删除">✕</button></div>'; }).join('');
+    c.innerHTML = cartSongs.map(function(s, i) { return '<div class="queue-item cart-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.song_name) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="song-price">¥' + s.price.toFixed(2) + '</div></div><button class="btn-remove" onclick="removeFromCart(' + s.id + ')" title="删除">✕</button></div>'; }).join('');
 }
 function renderPending() {
     var c = document.getElementById('pending-queue');
     document.getElementById('pending-badge').textContent = pendingSongs.length;
     if (!pendingSongs.length) { c.innerHTML = '<p class="empty-queue">还没有已确认的歌曲</p>'; return; }
-    c.innerHTML = pendingSongs.map(function(s, i) { return '<div class="queue-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="status-label pending">待演唱</span></div></div>'; }).join('');
+    c.innerHTML = pendingSongs.map(function(s, i) { return '<div class="queue-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.song_name) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="status-label pending">待演唱</span></div></div>'; }).join('');
     updateLiveBadge();
 }
 function renderWaiting() {
     var c = document.getElementById('waiting-queue'), b = document.getElementById('waiting-count');
     if (b) b.textContent = waitingSongs.length;
     if (!waitingSongs.length) { c.innerHTML = '<p class="empty-queue">没有待确认的歌曲</p>'; return; }
-    c.innerHTML = waitingSongs.map(function(s, i) { return '<div class="queue-item waiting-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="waiting-status">⏳ 等待歌手确认</span></div></div>'; }).join('');
+    c.innerHTML = waitingSongs.map(function(s, i) { return '<div class="queue-item waiting-item' + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.song_name) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="waiting-status">⏳ 等待歌手确认</span></div></div>'; }).join('');
     updateLiveBadge();
 }
 function renderPlayed() {
@@ -150,7 +150,7 @@ function renderPlayed() {
     c.innerHTML = playedSongs.map(function(s, i) {
         var st = s.status === 'completed' ? '已完成' : '已跳过';
         var sc = s.status === 'completed' ? 'completed' : 'skipped';
-        return '<div class="queue-item ' + s.status + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="status-label ' + sc + '">' + st + '</span></div></div>';
+        return '<div class="queue-item ' + s.status + (s.requester === userNickname ? ' my-song' : '') + '"><span class="queue-number">' + (i + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(s.song_name) + '》</div><div class="requester">点歌人：' + escapeHtml(s.requester) + (s.requester === userNickname ? '<span class="my-tag">我的点歌</span>' : '') + '</div><div class="queue-time">' + formatTime(s.timestamp) + '</div><span class="status-label ' + sc + '">' + st + '</span></div></div>';
     }).join('');
 }
 
