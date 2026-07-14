@@ -83,6 +83,7 @@ async function removeFromCart(id) {
     try { var r = await fetch(API_BASE + '/queue/cart/' + id, { method: 'DELETE' }); var d = await r.json(); if (d.success) { showMessage(d.message); cartSongs = cartSongs.filter(function(i) { return i.id !== id; }); renderCart(); updateCartSummary(d.data); } } catch (e) {}
 }
 async function createOrder() {
+    document.getElementById('loading-overlay').classList.remove('hidden');
     if (!cartSongs.length) { showMessage('已点歌曲列表为空', 'error'); return; }
     try { var ct = document.getElementById('contact').value.trim(); var r = await fetch(API_BASE + '/orders/create', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contact: ct }) }); var d = await r.json(); if (d.success) { window.location.href = '/payment?orderId=' + d.data.order.id; } else { showMessage(d.message, 'error'); } } catch (e) { showMessage('网络错误', 'error'); }
 }
@@ -175,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var ok = await addToCart(sn, rq, ct);
         if (ok) document.getElementById('song-name').value = '';
     });
-    document.getElementById('checkout-btn').addEventListener('click', createOrder);
+    document.getElementById('checkout-btn').addEventListener('click', function() { document.getElementById('loading-overlay').classList.remove('hidden'); createOrder(); });
     document.getElementById('close-modal-btn').addEventListener('click', hidePaymentModal);
 });
 
