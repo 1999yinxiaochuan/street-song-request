@@ -149,6 +149,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentOrderId = getOrderIdFromUrl();
     
     if (!currentOrderId) {
+        hideLoading();
         showMessage('无效的订单链接', 'error');
         document.getElementById('loading-state').innerHTML = `
             <p style="color: var(--accent-red);">无效的订单链接</p>
@@ -164,6 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderOrder(data.order, data.paymentQRUrl); hideLoading();
         showPaymentContent();
     } catch (e) {
+        hideLoading();
         showMessage('订单不存在或已过期', 'error');
         document.getElementById('loading-state').innerHTML = `
             <p style="color: var(--accent-red);">订单不存在或已过期</p>
