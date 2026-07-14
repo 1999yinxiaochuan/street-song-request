@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1784017175479,
+    "songName": "向天再借五百年",
+    "requester": "180",
+    "contact": "",
+    "timestamp": "2026-07-14T08:19:35.479Z",
+    "status": "skipped",
+    "price": 7.5,
+    "orderId": null
+  },
+  {
+    "id": 1784017211111,
+    "songName": "晴天",
+    "requester": "180",
+    "contact": "",
+    "timestamp": "2026-07-14T08:20:11.111Z",
+    "status": "playing",
+    "price": 7.5,
+    "orderId": null
+  },
+  {
+    "id": 1784017327622,
+    "songName": "测试歌曲",
+    "requester": "180",
+    "contact": "",
+    "timestamp": "2026-07-14T08:22:07.622Z",
+    "status": "cart",
+    "price": 10
+  }
+]

@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>街角点歌台 - 管理后台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header>
+        <div class="logo-area">
+            <span class="music-icon">♪</span>
+            <h1>歌手控制台</h1>
+        </div>
+    </header>
+    <main>
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="queue">🎵 歌曲队列 <span class="tab-badge" id="queue-badge">0</span></button>
+            <button class="tab-btn" data-tab="orders">💰 待确定收款 <span class="tab-badge" id="orders-badge">0</span></button>
+            <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
+        </div>
+        <div class="tab-content active" id="tab-queue">
+            <section class="queue-section">
+                <div class="queue-toolbar">
+                    <button class="toolbar-btn" id="add-song-btn-inline">➕ 添加歌曲</button>
+                    <button class="toolbar-btn" id="shuffle-btn-inline">🔀 随机</button>
+                    <button class="toolbar-btn danger" id="clear-btn-inline">🗑️ 清空</button>
+                </div>
+                <div class="add-song-inline hidden" id="add-song-inline">
+                    <input type="text" id="add-song-input-inline" placeholder="输入歌曲名称">
+                    <button class="btn btn-success" id="add-song-confirm-btn">添加</button>
+                    <button class="btn btn-secondary" id="add-song-cancel-btn">取消</button>
+                </div>
+                <div class="queue-subtabs">
+                    <button class="subtab-btn active" data-subtab="pending">🎤 待演唱 <span class="subtab-badge" id="pending-badge">0</span></button>
+                    <button class="subtab-btn" data-subtab="played">✅ 已演唱 <span class="subtab-badge" id="played-badge">0</span></button>
+                </div>
+                <div class="subtab-content active" id="subtab-pending"><div id="admin-queue-pending" class="queue-list admin-queue"><p class="empty-queue">没有待演唱的歌曲</p></div></div>
+                <div class="subtab-content" id="subtab-played"><div id="admin-queue-played" class="queue-list admin-queue"><p class="empty-queue">还没有已演唱的歌曲</p></div></div>
+            </section>
+        </div>
+        <div class="tab-content" id="tab-orders">
+            <section class="orders-section">
+                <div id="pending-orders" class="orders-list"><p class="empty-queue">没有待处理的订单</p></div>
+            </section>
+        </div>
+        <div class="tab-content" id="tab-settings">
+            <section class="settings-section"><h2>🎤 基本设置</h2><div class="settings-card"><div class="input-group"><label for="singer-name">歌手名称</label><input type="text" id="singer-name" placeholder="街头歌手"></div><div class="input-group"><label for="announce-text">公告文字</label><input type="text" id="announce-text" placeholder="欢迎点歌！"></div><button class="btn btn-primary" id="save-basic-btn">保存基本设置</button></div></section>
+            <section class="settings-section"><h2>💰 定价设置</h2><div class="settings-card"><div class="config-grid"><div class="input-group"><label for="price-per-song">单曲价格（元）</label><input type="number" id="price-per-song" min="0" step="1" value="10"></div><div class="input-group"><label for="bundle-quantity">套餐数量（首）</label><input type="number" id="bundle-quantity" min="2" step="1" value="2"></div><div class="input-group"><label for="bundle-price">套餐价格（元）</label><input type="number" id="bundle-price" min="0" step="1" value="15"></div></div><button class="btn btn-primary" id="save-pricing-btn">保存定价设置</button></div></section>
+            <section class="settings-section"><h2>📱 收款码设置</h2><div class="settings-card"><input type="file" id="qr-upload" accept="image/*" class="file-input"><div class="qr-preview" id="qr-preview"></div><button class="btn btn-primary mt-1" id="save-qr-btn">保存收款码</button></div></section>
+        </div>
+    </main>
+    <script src="js/admin.js"></script>
+</body>
+</html>

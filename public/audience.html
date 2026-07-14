@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>街角点歌台 - 点歌</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+    <header><div class="logo-area"><span class="music-icon">♪</span><h1>街角点歌台</h1></div><p class="subtitle" id="singer-name">欢迎点歌</p></header>
+    <main>
+        <div class="tab-nav audience-tabs">
+            <button class="tab-btn active" data-tab="request">🎵 点歌</button>
+            <button class="tab-btn" data-tab="live">🎤 现场 <span class="tab-badge" id="live-badge">0</span></button>
+        </div>
+
+        <div class="tab-content active" id="tab-request">
+            <section class="announcement-section hidden" id="announcement-section"><div class="announcement-content" id="announcement-content"></div></section>
+            <section class="pricing-section"><h2>💰 点歌价格</h2><div class="price-card"><div class="price-main" id="price-main">¥10 / 首</div><div class="price-bundle" id="price-bundle">套餐：¥15 / 2首（自动优惠）</div></div></section>
+            <section class="song-request-section"><h2>🎵 点一首歌</h2><form id="song-request-form"><div class="input-group"><label for="song-name">歌曲名称 *</label><input type="text" id="song-name" placeholder="例如：晴天、平凡之路" required></div><div class="input-group"><label for="requester-name">你的昵称（必填，方便识别）</label><input type="text" id="requester-name" placeholder="请输入你的昵称" required></div><div class="input-group"><label for="contact">联系方式（可选，方便通知）</label><input type="text" id="contact" placeholder="微信号或手机号"></div><button type="submit" class="btn btn-primary btn-block"><span class="btn-icon">♪</span>加入已点歌曲</button></form></section>
+            <section class="cart-overview-section hidden" id="cart-overview-section"><h2>🎵 已点歌曲 <span id="cart-count" class="badge">0</span></h2><div class="cart-summary"><div class="cart-info"><span id="cart-song-count">0 首歌曲</span><span class="cart-total" id="cart-total">¥0</span><span class="price-hint" id="price-hint"></span></div><button class="btn btn-checkout btn-block" id="checkout-btn" disabled>🎤 去点歌支付</button></div></section>
+            <section class="cart-list-section hidden" id="cart-list-section"><h2>🎵 已点歌曲列表</h2><div id="cart-list" class="queue-list"><p class="empty-queue">还没有点歌，去点一首吧！</p></div></section>
+        </div>
+
+        <div class="tab-content" id="tab-live">
+            <section class="waiting-section" id="waiting-section"><h2>⏳ 待确认 <span class="badge badge-warning" id="waiting-count">0</span></h2><p class="section-hint">已支付，等待歌手确认收款</p><div id="waiting-queue" class="queue-list"><p class="empty-queue">没有待确认的歌曲</p></div></section>
+            <section class="live-section">
+                <div class="queue-subtabs">
+                    <button class="subtab-btn active" data-subtab="upcoming">🎤 待演唱 <span class="subtab-badge" id="pending-badge">0</span></button>
+                    <button class="subtab-btn" data-subtab="played-aud">✅ 已演唱 <span class="subtab-badge" id="played-badge">0</span></button>
+                </div>
+                <div class="subtab-content active" id="subtab-upcoming"><div id="pending-queue" class="queue-list"><p class="empty-queue">还没有已确认的歌曲</p></div></div>
+                <div class="subtab-content" id="subtab-played-aud"><div id="played-queue" class="queue-list"><p class="empty-queue">还没有已演唱的歌曲</p></div></div>
+            </section>
+        </div>
+    </main>
+    <div class="modal-overlay hidden" id="payment-modal"><div class="modal-content payment-modal"><button class="modal-close" id="close-modal-btn">&times;</button><div class="modal-header"><h2>💳 点歌支付</h2></div><div class="modal-body"><div class="order-summary"><h3>📋 订单详情</h3><div class="order-songs" id="modal-order-songs"></div><div class="order-total"><span>总计：</span><span class="total-price" id="modal-total-price">¥0</span></div></div><div class="payment-qr-area"><p class="payment-instruction">📱 请长按保存下方收款码图片，然后进行支付</p><div class="qr-container" id="modal-payment-qr"><span class="qr-icon">¥</span><p>扫码支付</p></div><p class="payment-hint" id="modal-payment-hint">⚠️ 付款完成后务必点击下方按钮确认，否则歌手无法收到您的点歌！</p><div class="payment-confirm-area" style="padding-top:0"><button class="btn btn-success btn-block" onclick="window.location.href='/'">✅ 已扫码支付完成</button></div></div></div></div></div></div>
+    <script src="js/audience.js"></script>
+</body>
+</html>
