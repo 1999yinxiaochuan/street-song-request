@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 街角点歌台 v2 - 后端服务器
  * Node.js + Express + Supabase
  * 支持购物车和支付确认流程
@@ -27,8 +27,8 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 // ============================================
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ============================================
