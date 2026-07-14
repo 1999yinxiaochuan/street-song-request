@@ -10,6 +10,7 @@ let currentOrder = null;
 let appConfig = {};
 let userNickname = localStorage.getItem('userNickname') || '';
 
+function hideLoading() { var el = document.getElementById("loading-overlay"); if (el) el.classList.add("hidden"); }
 function showMessage(text, type) {
     type = type || 'success';
     var m = document.querySelector('.message');

@@ -3,6 +3,7 @@
  */
 const API_BASE = window.location.origin + '/api';
 
+function hideLoading() { var el = document.getElementById("loading-overlay"); if (el) el.classList.add("hidden"); }
 function showMessage(text, type) {
     type = type || 'success';
     var existing = document.querySelector('.message');
