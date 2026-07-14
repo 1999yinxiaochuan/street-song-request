@@ -39,6 +39,28 @@ function calculatePrice(config) {
     return config.price_per_song;
 }
 
+
+// ── 配置缓存（避免每次请求都查数据库）──
+let configCache = null;
+let configCacheTime = 0;
+const CONFIG_CACHE_TTL = 30000; // 30秒缓存
+
+async function getCachedConfig() {
+    const now = Date.now();
+    if (configCache && (now - configCacheTime) < CONFIG_CACHE_TTL) {
+        return configCache;
+    }
+    configCache = await getConfig();
+    configCacheTime = now;
+    return configCache;
+}
+
+// 配置更新后清除缓存
+function clearConfigCache() {
+    configCache = null;
+    configCacheTime = 0;
+}
+
 function calculateOptimalPrice(songCount, config) {
     if (songCount <= 0) return 0;
     const { price_per_song, bundle_price, bundle_quantity } = config;
@@ -66,7 +88,7 @@ app.post('/api/queue', async (req, res) => {
     if (!songName || !songName.trim()) {
         return res.status(400).json({ success: false, message: '歌曲名称不能为空' });
     }
-    const config = await getConfig();
+    const config = await getCachedConfig();
     const newSong = {
         id: Date.now(),
         song_name: songName.trim(),
@@ -115,7 +137,7 @@ app.post('/api/queue/cart', async (req, res) => {
     if (!songName || !songName.trim()) {
         return res.status(400).json({ success: false, message: '歌曲名称不能为空' });
     }
-    const config = await getConfig();
+    const config = await getCachedConfig();
     // 获取当前购物车数量
     const { data: cartSongs } = await supabase.from('songs').select('*').eq('status', 'cart');
     const currentCount = (cartSongs || []).length;
@@ -160,7 +182,7 @@ app.delete('/api/queue/cart/:id', async (req, res) => {
     await supabase.from('songs').delete().eq('id', parseInt(id));
 
     // 重新计算价格
-    const config = await getConfig();
+    const config = await getCachedConfig();
     const { data: remaining } = await supabase.from('songs').select('*').eq('status', 'cart');
     if (remaining && remaining.length > 0) {
         const newTotal = calculateOptimalPrice(remaining.length, config);
@@ -187,7 +209,7 @@ app.post('/api/orders/create', async (req, res) => {
         return res.status(400).json({ success: false, message: '购物车为空' });
     }
     const totalPrice = cartSongs.reduce((sum, item) => sum + item.price, 0);
-    const config = await getConfig();
+    const config = await getCachedConfig();
     const order = {
         id: Date.now(),
         song_ids: cartSongs.map(item => item.id),
@@ -215,7 +237,7 @@ app.post('/api/orders/create', async (req, res) => {
 app.get('/api/orders/:id', async (req, res) => {
     const { data: order } = await supabase.from('orders').select('*').eq('id', parseInt(req.params.id)).single();
     if (!order) return res.status(404).json({ success: false, message: '订单不存在' });
-    const config = await getConfig();
+    const config = await getCachedConfig();
     res.json({ success: true, data: { order, paymentQRUrl: config.payment_qr_url } });
 });
 
@@ -280,7 +302,7 @@ app.delete('/api/queue', async (req, res) => {
 // ============================================
 
 app.get('/api/config', async (req, res) => {
-    const config = await getConfig();
+    const config = await getCachedConfig();
     res.json({ success: true, data: {
         pricePerSong: config.price_per_song,
         bundlePrice: config.bundle_price,
