@@ -159,7 +159,7 @@ function renderPlayed() {
 document.addEventListener('DOMContentLoaded', function() {
     initAudienceTabs();
     if (userNickname) document.getElementById('requester-name').value = userNickname;
-    fetchConfig(); fetchCart(); fetchPending(); fetchWaiting(); fetchPlayed();
+    Promise.all([fetchConfig(), fetchCart(), fetchPending(), fetchWaiting(), fetchPlayed()]).then(function() { hideLoading(); }).catch(function() { hideLoading(); });
     setInterval(fetchCart, 8000);
     setInterval(fetchPending, 8000);
     setInterval(fetchWaiting, 8000);
@@ -191,3 +191,4 @@ async function confirmPayment() {
         else { showMessage(d.message, 'error'); }
     } catch (e) { showMessage('网络错误', 'error'); }
 }
+setTimeout(hideLoading, 5000);

@@ -224,3 +224,4 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.readAsDataURL(file);
     });
 });
+setTimeout(hideLoading, 5000);
