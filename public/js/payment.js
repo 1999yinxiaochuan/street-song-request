@@ -161,7 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     try {
         const data = await fetchOrder(currentOrderId);
-        renderOrder(data.order, data.paymentQRUrl);
+        renderOrder(data.order, data.paymentQRUrl); hideLoading();
         showPaymentContent();
     } catch (e) {
         showMessage('订单不存在或已过期', 'error');
@@ -174,3 +174,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 确认支付按钮
     document.getElementById('confirm-btn').addEventListener('click', confirmPayment);
 });
+setTimeout(hideLoading, 5000);
