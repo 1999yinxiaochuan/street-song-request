@@ -273,6 +273,51 @@ app.get('/api/orders/pending', async (req, res) => {
     res.json({ success: true, data: data || [] });
 });
 
+
+// ── 自动关闭超时订单（60分钟）──
+async function closeExpiredOrders() {
+    const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+    await supabase.from('orders')
+        .update({ status: 'expired' })
+        .eq('status', 'waiting_payment')
+        .lt('created_at', cutoff);
+}
+// 每5分钟检查一次
+setInterval(closeExpiredOrders, 5 * 60 * 1000);
+
+// 手动确认订单已支付（歌手端使用）
+app.put('/api/orders/:id/confirm-payment', async (req, res) => {
+    const { data: order, error } = await supabase.from('orders')
+        .update({ status: 'paid' })
+        .eq('id', req.params.id)
+        .eq('status', 'waiting_payment')
+        .select()
+        .single();
+    if (error || !order) {
+        return res.status(400).json({ error: '订单不存在或状态异常' });
+    }
+    res.json({ success: true, data: order, message: '已确认支付' });
+});
+
+// 关闭订单（歌手端使用）
+app.put('/api/orders/:id/close', async (req, res) => {
+    const { data: order, error } = await supabase.from('orders')
+        .update({ status: 'expired' })
+        .eq('id', req.params.id)
+        .select()
+        .single();
+    if (error || !order) {
+        return res.status(400).json({ error: '订单不存在' });
+    }
+    res.json({ success: true, data: order, message: '订单已关闭' });
+});
+
+// 获取所有订单（包含已过期的）
+app.get('/api/orders/all', async (req, res) => {
+    const { data } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+    res.json({ success: true, data: data || [] });
+});
+
 // ============================================
 // API 路由 - 歌曲状态更新
 // ============================================

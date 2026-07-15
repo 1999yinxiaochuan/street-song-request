@@ -138,9 +138,14 @@ function renderPendingOrders(orders) {
         for (var j = 0; j < o.songs.length; j++) {
             songsHtml += '<span style="background:rgba(255,107,53,0.1);color:#ff6b35;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.85rem;font-weight:500">《' + escapeHtml(o.songs[j]) + '》</span>';
         }
-        var act = o.status === 'paid'
-            ? '<button class="btn btn-success" onclick="confirmOrder(' + o.id + ')">确认收款</button>'
-            : '<span style="font-size:0.85rem;color:#8b7a50;font-style:italic">等待用户支付确认</span>';
+        var act = '';
+        if (o.status === 'waiting_payment') {
+            act = '<div style="display:flex;gap:0.5rem;justify-content:flex-end"><button class="btn btn-success" onclick="confirmPayment(' + o.id + ')" style="background:#22c55e;color:#fff;padding:0.5rem 1rem;border:none;border-radius:8px;font-weight:600;cursor:pointer">✓ 确认已支付</button><button onclick="closeOrder(' + o.id + ')" style="background:#ef4444;color:#fff;padding:0.5rem 1rem;border:none;border-radius:8px;font-weight:600;cursor:pointer">✕ 关闭订单</button></div>';
+        } else if (o.status === 'paid') {
+            act = '<button class="btn btn-success" onclick="confirmOrder(' + o.id + ')">确认收款</button>';
+        } else {
+            act = '<span style="font-size:0.85rem;color:#8b7a50;font-style:italic">已确认</span>';
+        }
         s += '<div style="background:#fff;border:1px solid rgba(139,105,20,0.12);border-radius:16px;padding:1.2rem;margin-bottom:1rem;border-left:4px solid ' + borderColor + ';box-shadow:0 2px 8px rgba(0,0,0,0.06)">';
         s += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(139,105,20,0.08)">';
         s += '<span style="font-weight:700;color:#1a1a2e">订单 #' + o.id + '</span>';
@@ -160,6 +165,34 @@ function renderPendingOrders(orders) {
     }
     c.innerHTML = s;
 }
+async function confirmPayment(orderId) {
+    if (!confirm('确认此订单已支付？')) return;
+    try {
+        var res = await fetch('/api/orders/' + orderId + '/confirm-payment', { method: 'PUT' });
+        var data = await res.json();
+        if (data.success) {
+            showMessage('已确认支付', 'success');
+            loadOrders();
+        } else {
+            showMessage(data.error || '操作失败', 'error');
+        }
+    } catch (e) { showMessage('网络错误', 'error'); }
+}
+
+async function closeOrder(orderId) {
+    if (!confirm('确认关闭此订单？')) return;
+    try {
+        var res = await fetch('/api/orders/' + orderId + '/close', { method: 'PUT' });
+        var data = await res.json();
+        if (data.success) {
+            showMessage('订单已关闭', 'success');
+            loadOrders();
+        } else {
+            showMessage(data.error || '操作失败', 'error');
+        }
+    } catch (e) { showMessage('网络错误', 'error'); }
+}
+
 function renderAdminQueue(songs) {
     var pending = songs.filter(function(s) { return s.status === 'pending' || s.status === 'playing'; });
     var played = songs.filter(function(s) { return s.status === 'completed' || s.status === 'skipped'; });
