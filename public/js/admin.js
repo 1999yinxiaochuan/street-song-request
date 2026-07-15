@@ -153,7 +153,7 @@ function renderAdminQueue(songs) {
             var acts = isP
                 ? '<button class="action-btn-small complete" onclick="completeSong(' + item.id + ')" title="演唱完成">✓</button><button class="action-btn-small skip" onclick="skipSong(' + item.id + ')" title="跳过">⏭</button>'
                 : '<button class="action-btn-small play" onclick="playSong(' + item.id + ')" title="开始演唱">▶</button><button class="action-btn-small skip" onclick="skipSong(' + item.id + ')" title="跳过">⏭</button><button class="action-btn-small remove" onclick="removeSong(' + item.id + ')" title="删除">✕</button>';
-            return '<div class="queue-item ' + item.status + '"><span class="queue-number">' + (idx + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(item.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(item.requester) + '</div><div class="queue-time">' + formatTime(item.timestamp) + '</div><span class="status-label ' + (isP ? 'playing' : 'pending') + '">' + (isP ? '演唱中' : '待演唱') + '</span></div><div class="queue-item-actions">' + acts + '</div></div>';
+            return '<div class="queue-item ' + item.status + '"><span class="queue-number">' + (idx + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(item.song_name || item.songName || '') + '》</div><div class="requester">点歌人：' + escapeHtml(item.requester) + '</div><div class="queue-time">' + formatTime(item.timestamp) + '</div><span class="status-label ' + (isP ? 'playing' : 'pending') + '">' + (isP ? '演唱中' : '待演唱') + '</span></div><div class="queue-item-actions">' + acts + '</div></div>';
         }).join('');
     }
 
@@ -164,7 +164,7 @@ function renderAdminQueue(songs) {
         plc.innerHTML = played.map(function(item, idx) {
             var st = item.status === 'completed' ? '已完成' : '已跳过';
             var sc = item.status === 'completed' ? 'completed' : 'skipped';
-            return '<div class="queue-item ' + item.status + '"><span class="queue-number">' + (idx + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(item.songName) + '》</div><div class="requester">点歌人：' + escapeHtml(item.requester) + '</div><div class="queue-time">' + formatTime(item.timestamp) + '</div><span class="status-label ' + sc + '">' + st + '</span></div><div class="queue-item-actions"><button class="action-btn-small remove" onclick="removeSong(' + item.id + ')" title="删除">✕</button></div></div>';
+            return '<div class="queue-item ' + item.status + '"><span class="queue-number">' + (idx + 1) + '</span><div class="song-info"><div class="song-name">《' + escapeHtml(item.song_name || item.songName || '') + '》</div><div class="requester">点歌人：' + escapeHtml(item.requester) + '</div><div class="queue-time">' + formatTime(item.timestamp) + '</div><span class="status-label ' + sc + '">' + st + '</span></div><div class="queue-item-actions"><button class="action-btn-small remove" onclick="removeSong(' + item.id + ')" title="删除">✕</button></div></div>';
         }).join('');
     }
 }

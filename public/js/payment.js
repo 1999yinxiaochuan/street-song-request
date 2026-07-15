@@ -15,6 +15,7 @@ let currentOrder = null;
 // 工具函数
 // ============================================
 
+function hideLoading() { var el = document.getElementById("loading-overlay"); if (el) el.classList.add("hidden"); }
 function showMessage(text, type = 'success') {
     const existingMessage = document.querySelector('.message');
     if (existingMessage) {
