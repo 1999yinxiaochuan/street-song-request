@@ -126,17 +126,40 @@ function loadConfigToForm(c) {
 
 function renderPendingOrders(orders) {
     var c = document.getElementById('pending-orders');
-    if (!orders.length) { c.innerHTML = '<p class="empty-queue">没有待处理的订单</p>'; return; }
-    c.innerHTML = orders.map(function(o) {
+    if (!orders.length) { c.innerHTML = '<p style="text-align:center;color:#8b7a50;padding:2rem">没有待处理的订单</p>'; return; }
+    var s = '';
+    for (var i = 0; i < orders.length; i++) {
+        var o = orders[i];
+        var price = o.total_price || o.totalPrice || 0;
         var sc = o.status === 'waiting_payment' ? 'waiting' : (o.status === 'paid' ? 'paid' : 'confirmed');
         var st = o.status === 'waiting_payment' ? '等待支付' : (o.status === 'paid' ? '已支付，待确认' : '已确认');
+        var borderColor = sc === 'waiting' ? '#f59e0b' : (sc === 'paid' ? '#3b82f6' : '#22c55e');
+        var songsHtml = '';
+        for (var j = 0; j < o.songs.length; j++) {
+            songsHtml += '<span style="background:rgba(255,107,53,0.1);color:#ff6b35;padding:0.3rem 0.8rem;border-radius:20px;font-size:0.85rem;font-weight:500">《' + escapeHtml(o.songs[j]) + '》</span>';
+        }
         var act = o.status === 'paid'
             ? '<button class="btn btn-success" onclick="confirmOrder(' + o.id + ')">确认收款</button>'
-            : '<span class="waiting-hint">等待用户支付确认</span>';
-        return '<div class="order-card ' + sc + '"><div class="order-header"><span class="order-id">订单 #' + o.id + '</span><span class="order-time">' + formatTime(o.created_at || o.createdAt || '') + '</span></div><div class="order-body"><div class="order-songs">' + o.songs.map(function(s) { return '<span class="order-song-tag">《' + escapeHtml(s) + '》</span>'; }).join('') + '</div><div class="order-info"><span class="order-requester">点歌人：' + escapeHtml(o.requester) + '</span>' + (o.contact ? '<span class="order-contact">联系方式：' + escapeHtml(o.contact) + '</span>' : '') + '</div><div class="order-total"><span>总计：</span><span class="total-price">¥' + o.total_price || o.totalPrice || 0 + '</span></div></div><div class="order-actions"><span class="order-status ' + sc + '">' + st + '</span>' + act + '</div></div>';
-    }).join('');
+            : '<span style="font-size:0.85rem;color:#8b7a50;font-style:italic">等待用户支付确认</span>';
+        s += '<div style="background:#fff;border:1px solid rgba(139,105,20,0.12);border-radius:16px;padding:1.2rem;margin-bottom:1rem;border-left:4px solid ' + borderColor + ';box-shadow:0 2px 8px rgba(0,0,0,0.06)">';
+        s += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.8rem;padding-bottom:0.6rem;border-bottom:1px solid rgba(139,105,20,0.08)">';
+        s += '<span style="font-weight:700;color:#1a1a2e">订单 #' + o.id + '</span>';
+        s += '<span style="font-size:0.85rem;color:#8b7a50">' + formatTime(o.created_at || o.createdAt || '') + '</span>';
+        s += '</div>';
+        s += '<div style="display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:0.8rem">' + songsHtml + '</div>';
+        s += '<div style="font-size:0.9rem;color:#5a5a6e;margin-bottom:0.8rem">';
+        s += '<div>点歌人：' + escapeHtml(o.requester) + '</div>';
+        if (o.contact) s += '<div>联系方式：' + escapeHtml(o.contact) + '</div>';
+        s += '</div>';
+        s += '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:0.8rem;border-top:1px solid rgba(139,105,20,0.08)">';
+        s += '<span style="font-size:1.3rem;font-weight:700;color:#ff6b35">¥' + price + '</span>';
+        s += '<span style="padding:0.3rem 0.8rem;border-radius:20px;font-size:0.8rem;font-weight:600;background:' + (sc === 'waiting' ? 'rgba(245,158,11,0.15)' : (sc === 'paid' ? 'rgba(59,130,246,0.15)' : 'rgba(34,197,94,0.15)')) + ';color:' + borderColor + '">' + st + '</span>';
+        s += '</div>';
+        s += '<div style="margin-top:0.8rem;text-align:right">' + act + '</div>';
+        s += '</div>';
+    }
+    c.innerHTML = s;
 }
-
 function renderAdminQueue(songs) {
     var pending = songs.filter(function(s) { return s.status === 'pending' || s.status === 'playing'; });
     var played = songs.filter(function(s) { return s.status === 'completed' || s.status === 'skipped'; });

@@ -1,4 +1,4 @@
-﻿/* -- 主Tab切换 -- */
+/* -- 主Tab切换 -- */
 .tab-content{display:none}
 .tab-content.active{display:block;animation:fade-up 0.4s ease}
 /* ============================================

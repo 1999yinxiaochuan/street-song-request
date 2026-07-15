@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    街角点歌台 v3 — 歌手控制台专用样式
    Admin | Singer Console
    ============================================ */
@@ -314,14 +314,14 @@
 }
 
 /* ── 响应式 ── */
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .tab-nav {
-    flex-direction: column;
-    gap: 0.2rem;
+    flex-wrap: wrap;
   }
 
   .tab-btn {
-    padding: 0.65rem 1rem;
+    min-width: 45%;
+    padding: 0.65rem 0.8rem;
   }
 
   .queue-toolbar {
@@ -419,7 +419,8 @@
 .orders-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
 }
 
 .order-card {
@@ -429,6 +430,8 @@
   padding: 1.2rem;
   box-shadow: var(--shadow-card);
   transition: transform 0.2s ease;
+  overflow: hidden;
+  position: relative;
 }
 
 .order-card:hover {
